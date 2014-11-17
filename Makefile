@@ -4,30 +4,27 @@
 # Solaris, you will need to uncomment this definition.
 #SYSV_LIBS =    -lnsl -lsocket
 
-BINDIR 	=	/usr/sbin
-MANDIR 	=	/usr/share/man
-CC 	=	gcc
-CFLAGS 	=	-O -ansi -pedantic -U__STRICT_ANSI__ -Wpointer-arith -Wshadow -Wcast-qual -Wcast-align -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wno-long-long
+BINDIR 	= /usr/sbin
+MANDIR 	= /usr/share/man
+CC 	= gcc
+CFLAGS 	= -O -ansi -pedantic -U__STRICT_ANSI__ -Wpointer-arith -Wshadow -Wcast-qual -Wcast-align -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wno-long-long
 LDFLAGS =
-LDLIBS 	=	$(SYSV_LIBS)
+LDLIBS 	= $(SYSV_LIBS)
 
-CC 	:=	$(DIET) $(CC)
-
-
-all:		mini_sendmail
+all:	mini_sendmail
 
 diet:
 	make DIET=diet mini_sendmail
 
 
-mini_sendmail:	mini_sendmail.o
+mini_sendmail: mini_sendmail.o
 	$(CC) $(LDFLAGS) mini_sendmail.o $(LDLIBS) -o mini_sendmail
 
-mini_sendmail.o:	mini_sendmail.c version.h
+mini_sendmail.o: mini_sendmail.c version.h
 	$(CC) $(CFLAGS) -c mini_sendmail.c
 
 
-install:	all
+install: all
 	rm -f $(BINDIR)/mini_sendmail
 	cp mini_sendmail $(BINDIR)
 	rm -f $(MANDIR)/man8/mini_sendmail.8
@@ -40,10 +37,10 @@ clean:
 
 tar:
 	@name=`sed -n -e '/#define MINI_SENDMAIL_VERSION /!d' -e 's,.*mini_sendmail/,mini_sendmail-,' -e 's, .*,,p' version.h` ; \
-	  rm -rf $$name ; \
-	  mkdir $$name ; \
-	  tar cf - `cat FILES` | ( cd $$name ; tar xfBp - ) ; \
-	  chmod 644 $$name/Makefile ; \
-	  tar cf $$name.tar $$name ; \
-	  rm -rf $$name ; \
-	  gzip $$name.tar
+	rm -rf $$name ; \
+	mkdir $$name ; \
+	tar cf - `cat FILES` | ( cd $$name ; tar xfBp - ) ; \
+	chmod 644 $$name/Makefile ; \
+	tar cf $$name.tar $$name ; \
+	rm -rf $$name ; \
+	gzip $$name.tar
