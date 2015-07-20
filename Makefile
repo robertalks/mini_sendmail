@@ -7,7 +7,7 @@
 BINDIR 	= /usr/sbin
 MANDIR 	= /usr/share/man
 CC 	= gcc
-CFLAGS 	= -O -ansi -pedantic -U__STRICT_ANSI__ -Wpointer-arith -Wshadow -Wcast-qual -Wcast-align -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wno-long-long
+CFLAGS 	= -O2 -ansi -pedantic -U__STRICT_ANSI__ -Wpointer-arith -Wshadow -Wcast-qual -Wcast-align -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wno-long-long
 LDFLAGS =
 LDLIBS 	= $(SYSV_LIBS)
 
@@ -26,9 +26,10 @@ mini_sendmail.o: mini_sendmail.c version.h
 
 install: all
 	rm -f $(BINDIR)/mini_sendmail
-	cp mini_sendmail $(BINDIR)
+	install -p -m 0755 mini_sendmail $(BINDIR)
+	strip --strip-unneeded $(BINDIR)/mini_sendmail
 	rm -f $(MANDIR)/man8/mini_sendmail.8
-	cp mini_sendmail.8 $(MANDIR)/man8
+	install -p -m 0644 mini_sendmail.8 $(MANDIR)/man8
 	gzip -f -9 $(MANDIR)/man8/mini_sendmail.8
 	[ -x /usr/bin/mandb ] && /usr/bin/mandb --quiet
 
